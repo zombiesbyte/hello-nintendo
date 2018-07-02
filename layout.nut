@@ -3,16 +3,16 @@
 
 class UserConfig {
   </ label="Toons", help="Choose between a variety of toons (or turn them off)" options="off,mario-group,donkey-kong" order=1 /> optToons="mario-group";
-  </ label="BG Type", help="Choose the background image" options="original,extended,none" order=1 />bg2Type="original";
-  </ label="Grid Columns", help="Set the total items showing across a row (default 4 column items)" order=2 /> totalXGrid="4";
-  </ label="Grid Rows", help="Set the total items showing down a column (default 3 row count)" order=3 /> totalYGrid="3";
-  </ label="Grid Padding x", help="Set the x padding between grid items (default 38)" order=4 /> xPadGrid="38";
-  </ label="Grid Padding y", help="Set the y padding between grid items (default 21)" order=5 /> yPadGrid="21";
-  </ label="Grid Item Widths", help="Set the width of the items in the grid (default 108)" order=6 /> wItemGrid="108";
-  </ label="Grid Item Heights", help="Set the height of the items in the grid (default 147)" order=7 /> hItemGrid="147";
-  </ label="Grid Starting X", help="Starting x position of the overall grid (default 513)" order=7 /> xsGrid="513";
-  </ label="Grid Starting Y", help="Starting y postion of the overall grid (default 141)" order=7 /> ysGrid="141";
-  </ label="Grid Item Art", help="Set the art to be used for the grid items (default box)" order=10 /> gridArt="box";
+  </ label="BG Type", help="Choose the background image" options="original,extended,none" order=2 />bg2Type="original";
+  </ label="Grid Columns", help="Set the total items showing across a row (default 4 column items)" order=3 /> totalXGrid="4";
+  </ label="Grid Rows", help="Set the total items showing down a column (default 3 row count)" order=4 /> totalYGrid="3";
+  </ label="Grid Padding x", help="Set the x padding between grid items (default 38)" order=5 /> xPadGrid="38";
+  </ label="Grid Padding y", help="Set the y padding between grid items (default 21)" order=6 /> yPadGrid="21";
+  </ label="Grid Item Widths", help="Set the width of the items in the grid (default 108)" order=7 /> wItemGrid="108";
+  </ label="Grid Item Heights", help="Set the height of the items in the grid (default 147)" order=8 /> hItemGrid="147";
+  </ label="Grid Starting X", help="Starting x position of the overall grid (default 513)" order=9 /> xsGrid="513";
+  </ label="Grid Starting Y", help="Starting y postion of the overall grid (default 141)" order=10 /> ysGrid="141";
+  </ label="Grid Item Art", help="Set the art to be used for the grid items (default box)" order=11 /> gridArt="box";
 }
 
 local myConfig = fe.get_config();
@@ -108,23 +108,6 @@ function drawGrid(x, y, currentID){
     //eg tempDraw.rotation = -30;
 }
 
-fe.add_transition_callback( "update_my_list" );
-function update_my_list( ttype, var, ttime ) {
-    favHolder.file_name = getFavs(0);
-    if(ttype == Transition.StartLayout){
-        drawNextPage(var);
-        favHolder.file_name = getFavs(0);
-    }
-    else if(ttype == Transition.ToNewSelection){
-        favHolder.file_name = getFavs(0);
-    }
-    else if(ttype == Transition.EndNavigation){
-        if(resetDrawGrid) drawNextPage(0);
-        favHolder.file_name = getFavs(0);
-    } 
-    return false;
-}
-
 //This function loops through and draws our grid
 function drawNextPage(currentIndex){
     if(resetDrawGrid){
@@ -139,6 +122,22 @@ function drawNextPage(currentIndex){
         }        
     }
 }
+
+fe.add_transition_callback( "update_my_list" );
+function update_my_list( ttype, var, ttime ) {
+    favHolder.file_name = getFavs(0);
+    if(ttype == Transition.StartLayout){
+        drawNextPage(0);
+        favHolder.file_name = getFavs(0);
+    }
+    else if(ttype == Transition.EndNavigation){
+        if(resetDrawGrid) drawNextPage(0);
+        favHolder.file_name = getFavs(0);
+    } 
+    return false;
+}
+
+
 
 fe.add_signal_handler( this, "on_signal" );
 function on_signal( sig ) {
