@@ -1,5 +1,5 @@
 //Dal1980 v1.0 Hello-Nintendo
-//July 2018 V1.0
+//July 2018 V1.1
 
 class UserConfig {
   </ label="Toons", help="Choose between a variety of toons (or turn them off)" options="off,mario-group,donkey-kong" order=1 /> optToons="mario-group";
@@ -36,14 +36,19 @@ local modyGrid = 0; //adds y position modification for drawing grid
 local restrictXGrid = 0; //marker for restricting the x movement on grid
 local pageTurnYGrid = 0; //pagination for previous/next rows of the grid
 local selectorDrawn = false; //sets the trigger for drawing the selector (init)
-local textZ = 3;
+local textZ = 3; //sets our zorder. We need to keep this set to 3
+local gridAssets = []; //A place where I grid assets are stored
+local gridDrawComplete = false; //Marks the start/end of our initialisation of assets
+
 
 //backgrounds
 local bg1 = fe.add_image("parts/bg-layer1.png", 0, 0, 1280, 1024 );
 if(myConfig["bg2Type"] == "original") local bg2 = fe.add_image("parts/bg-layer2.png", 0, 0, 1280, 1024 );
 else if(myConfig["bg2Type"] == "extended") local bg2 = fe.add_image("parts/bg-layer2-extended.png", 0, 0, 1280, 1024 );
+
+//external assets
 local snapBox = fe.add_artwork("snap", 54, 302, 380, 284);
-local logoBox = fe.add_artwork("wheel", 47, 122, 400, 155);
+local logoBox = fe.add_artwork("logo", 47, 122, 400, 155);
 local cartBox = fe.add_artwork("cart", 283, 695, 233, 257);
 local snapTitle = fe.add_artwork("snaptitle", 53, 695, 200, 147);
 local backBox = fe.add_artwork("backbox", 547, 695, 222, 307);
@@ -98,14 +103,26 @@ function simpleCat( ioffset ) {
   else return "";
 }
 
+
 function drawGrid(x, y, currentID){
-    //we now need to use fe.get_art to find the full path to our art label    
-    local artPath = fe.get_art( gridArt, currentID );
-    local tempDraw = fe.add_image(artPath, x, y, wItemGrid, hItemGrid);
-    tempDraw.zorder = textZ;
+    if(!gridDrawComplete){
+        //we now need to use fe.get_art to find the full path to our art label    
+        local artPath = fe.get_art( gridArt, currentID );
+        gridAssets.append( fe.add_image(artPath, x, y, wItemGrid, hItemGrid) );
+        gridAssets[ gridAssets.len() -1 ].zorder = textZ;
+        //You can manipulate the objects further here
+        //eg. gridAssets[ gridAssets.len() -1 ].rotation = -30;
+    }
+    else {        
+        updateGrid(x, y, currentID, textZ - 3)
+    }
     textZ++;
-    //You can manipulate the objects further here
-    //eg tempDraw.rotation = -30;
+}
+
+//we update once our image objects are available
+function updateGrid(x, y, currentID, arrayID){
+    local artPath = fe.get_art( gridArt, currentID );
+    gridAssets[arrayID].file_name = artPath;
 }
 
 //This function loops through and draws our grid
@@ -114,6 +131,7 @@ function drawNextPage(currentIndex){
         currentIndex = modyGrid + modxGrid;
         resetDrawGrid = false;
     }
+    textZ = 3;
     local cia = 0; //this simply adds the incremental index 0,1,2,3...10,11.
     for(local y = 0; y < totalYGrid; y++){        
         for(local x = 0; x < totalXGrid; x++){
@@ -121,6 +139,7 @@ function drawNextPage(currentIndex){
             cia++;
         }        
     }
+    gridDrawComplete = true;
 }
 
 fe.add_transition_callback( "update_my_list" );
