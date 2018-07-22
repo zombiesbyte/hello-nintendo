@@ -3,16 +3,17 @@
 
 class UserConfig {
   </ label="Toons", help="Choose between a variety of toons (or turn them off)" options="off,mario-group,donkey-kong" order=1 /> optToons="mario-group";
-  </ label="BG Type", help="Choose the background image" options="original,extended,none" order=2 />bg2Type="original";
-  </ label="Grid Columns", help="Set the total items showing across a row (default 4 column items)" order=3 /> totalXGrid="4";
-  </ label="Grid Rows", help="Set the total items showing down a column (default 3 row count)" order=4 /> totalYGrid="3";
-  </ label="Grid Padding x", help="Set the x padding between grid items (default 38)" order=5 /> xPadGrid="38";
-  </ label="Grid Padding y", help="Set the y padding between grid items (default 21)" order=6 /> yPadGrid="21";
-  </ label="Grid Item Widths", help="Set the width of the items in the grid (default 108)" order=7 /> wItemGrid="108";
-  </ label="Grid Item Heights", help="Set the height of the items in the grid (default 147)" order=8 /> hItemGrid="147";
-  </ label="Grid Starting X", help="Starting x position of the overall grid (default 513)" order=9 /> xsGrid="513";
-  </ label="Grid Starting Y", help="Starting y postion of the overall grid (default 141)" order=10 /> ysGrid="141";
-  </ label="Grid Item Art", help="Set the art to be used for the grid items (default box)" order=11 /> gridArt="box";
+  </ label="BG Type", help="Choose the background image" options="original,extended,none" order=2 /> bg2Type="original";
+  </ label="Selector Icon", help="Choose the selector icon" options="mushroom,controller" order=3 /> selectorIcon="mushroom";
+  </ label="Grid Columns", help="Set the total items showing across a row (default 4 column items)" order=4 /> totalXGrid="4";
+  </ label="Grid Rows", help="Set the total items showing down a column (default 3 row count)" order=5 /> totalYGrid="3";
+  </ label="Grid Padding x", help="Set the x padding between grid items (default 38)" order=6 /> xPadGrid="38";
+  </ label="Grid Padding y", help="Set the y padding between grid items (default 21)" order=7 /> yPadGrid="21";
+  </ label="Grid Item Widths", help="Set the width of the items in the grid (default 108)" order=8 /> wItemGrid="108";
+  </ label="Grid Item Heights", help="Set the height of the items in the grid (default 147)" order=9 /> hItemGrid="147";
+  </ label="Grid Starting X", help="Starting x position of the overall grid (default 513)" order=10 /> xsGrid="513";
+  </ label="Grid Starting Y", help="Starting y postion of the overall grid (default 141)" order=11 /> ysGrid="141";
+  </ label="Grid Item Art", help="Set the art to be used for the grid items (default box)" order=12 /> gridArt="box";
 }
 
 local myConfig = fe.get_config();
@@ -90,7 +91,7 @@ labelListSize.set_rgb(63, 63, 63);
 //Custom game selector
 local gameSelector1 = fe.add_image("parts/selector1.png", xsGrid - 6, ysGrid - 6, wItemGrid + 12, hItemGrid + 12); //thegrid selector image (appears behind box z-order)
 gameSelector1.zorder = 2; //must be 2 or greater (less than 2 hides this)
-local gameSelector2 = fe.add_image("parts/selector2.png", xsGrid, ysGrid + 20, wItemGrid, hItemGrid); //the grid selector image (appears infront box z-order)
+local gameSelector2 = fe.add_image("parts/" + myConfig["selectorIcon"] + ".png", xsGrid, ysGrid + 20, wItemGrid, hItemGrid); //the grid selector image (appears infront box z-order)
 gameSelector2.zorder = 100;
 
 if(myConfig["optToons"] == "mario-group") local toons = fe.add_image("parts/mario-group.png", 1103, 616, 165, 404 );

@@ -42,3 +42,4 @@ Enjoy!
 
 1.1 Update
 - Bug fix: Menu would eventually slow down over time, this could have lead to the application crashing. This was due to image assets being constantly added to the playing field instead of a controlled number of specific assets which is now the case.
+
