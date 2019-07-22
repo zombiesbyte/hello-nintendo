@@ -224,3 +224,5 @@ function on_signal( sig ) {
     }
     else return false;
 }
+
+fe.layout.font = "";
